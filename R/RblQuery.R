@@ -10,16 +10,20 @@
 #'  \item{Parse the response file}{see \code{\link{RblParse}}}
 #' }
 #' 
-#' @param identifiers vector of Bloomberg identifiers. Ex c('SXXE Index', 'SX5E Index')
-#' @param fields vector of Bloomberg fields. Ex. c('PX_LAST', 'PX_CLOSE', 'PX_OPEN', 'PX_HIGH', 'PX_LOW')
-#' @param from date or string (format YYYY-MM-DD). The start time of the period of interest
-#' @param to date or string (format YYYY-MM-DD). The end time of the period of interest. Ignored if \emph{from} is not provided 
-#' @param overrides named list of Bloomberg overrides. Ex list('END_DT' = '20100101')
+#' @param identifiers vector of Bloomberg identifiers. E.g. c('SXXE Index', 'SX5E Index')
+#' @param fields vector of Bloomberg fields. E.g. c('PX_LAST', 'PX_CLOSE', 'PX_OPEN', 'PX_HIGH', 'PX_LOW')
+#' @param from date or string (format YYYY-MM-DD). Start time for the 'gethistory' request. If not provided, a 'getdata' request will be made
+#' @param to date or string (format YYYY-MM-DD). End time for the 'gethistory' request. Ignored if \emph{from} is not provided 
+#' @param overrides named vector of Bloomberg overrides. E.g. c('END_DT' = '20100101')
+#' @param add_headers named vector of additional headers. E.g. c(PROGRAMFLAG = 'oneshot')
 #' @param auto.assign logical. Should results be loaded to env? Ignored if \emph{from} is not provided 
 #' @param env where to create objects if auto.assign = TRUE
-#' @param split maximum number of identifiers to process at once. Split requests to avoid memory leaks
-#' @param pollFrequency the polling frequency to check if the response file is available at Bloomberg
+#' @param category vector of Data License categories to enable. E.g. c('SECMASTER', 'PRICING', 'FUNDAMENTALS'). WARNING! Each DL category is billed separately, so check your DL license carefully!
+#' @param limit prevent requesting data for more than this amout of identifiers. This is done to help you keeping your budget under control. Data License is billing based on the amout of instruments you request, so check your DL license carefully before increasing this limit. 
+#' @param split maximum number of identifiers to process at once. Requests are split to avoid memory leaks.
+#' @param frequency the polling frequency to check if the response file is available at Bloomberg
 #' @param timeout the timeout in seconds
+#' @param filename name assigned to the remote file. Only alphanumeric characters are allowed. Invalid characters are removed. 
 #' @param verbose logical. Should R report extra information on progress?
 #' 
 #' @return 
@@ -39,10 +43,10 @@
 #' @examples 
 #' \dontrun{
 #' # Run RblConnect first
-#' x <- RblQuery(fields = c('PX_LAST', 'PX_OPEN', 'PX_HIGH', 'PX_LOW'), 
-#'               identifiers = c('SXXE Index', "SX5E Index"), 
-#'               from = '2005-01-01')
-#' str(x)
+#' data <- RblQuery(fields = c('PX_LAST', 'PX_OPEN', 'PX_HIGH', 'PX_LOW'), 
+#'                  identifiers = c('SXXE Index', "SX5E Index"), 
+#'                  from = '2005-01-01')
+#' str(data)
 #' }
 #' 
 #' @export
@@ -52,38 +56,42 @@ RblQuery <- function(
   fields, 
   from = NULL, 
   to = Sys.Date(), 
-  overrides = NULL,
   auto.assign = FALSE, 
   env = parent.frame(),
+  category = c(),
+  add_headers = c(),
+  overrides = c(),
+  limit = 5,
   split = 100,
-  pollFrequency = 60, 
+  frequency = 60, 
   timeout = 3600, 
+  filename = format(Sys.time(), "%m%d%H%M%S"),
   verbose = TRUE) 
 {
   
   # checks
+  if(length(identifiers)>limit) stop(paste('\n Preventing Data License from requesting', length(identifiers), 'instruments. Increase the "limit" parameter to confirm and run the query. \n\n WARNING! \n Data License is billing based on the amout of instruments you request, so check your DL license carefully before increasing the limit.'))
   if(is.null(from)){
     if(to!=Sys.Date()) warning('Tha parameter "to" is ignored if "from" is not provided')
     if(auto.assign) warning('Tha parameter "auto.assign" is ignored if "from" is not provided')
   }
   
   # header
-  header <- list()
-  header$FIRMNAME <- RblUser()
-  header$PROGRAMNAME <- ifelse(is.null(from), 'getdata', 'gethistory')
+  header <- c()
+  header[['FIRMNAME']] <- RblUser()
+  header[['PROGRAMNAME']] <- ifelse(is.null(from), 'getdata', 'gethistory')
   
-  # header for getdata
-  if(header$PROGRAMNAME=='getdata') {
-    header$PRICING = 'yes' 
-    header$SECMASTER = 'yes'
-    header$FUNDAMENTALS = 'yes'
-  }
+  # Enable DL categories
+  for(i in category) header[[i]] <- 'yes'
   
   # header for gethistory
-  if(header$PROGRAMNAME=='gethistory'){
+  if(header[['PROGRAMNAME']]=='gethistory'){
     fmt <- '%Y%m%d'
-    header$DATERANGE <- paste0(format(as.Date(from), fmt), '|', format(as.Date(to), fmt))
+    header[['DATERANGE']] <- paste0(format(as.Date(from), fmt), '|', format(as.Date(to), fmt))
   }
+  
+  # add headers
+  for(i in names(add_headers)) header[[i]] <- add_headers[[i]]
   
   # info 
   i <- list()
@@ -93,6 +101,11 @@ RblQuery <- function(
   # split identifiers
   identifiers <- suppressWarnings(split(x = identifiers, seq(1, length(identifiers), by = split)))
   
+  # check filename
+  maxchar <- 13 - nchar(length(identifiers))
+  if(nchar(filename) > maxchar) 
+    stop(sprintf("filename cannot exceed %s characters", maxchar))
+  
   # upload request files
   for(n in 1:length(identifiers)){
   
@@ -100,7 +113,8 @@ RblQuery <- function(
     RblRequest <- RblRequestBuilder(header = header, fields = fields, identifiers = identifiers[[n]], overrides = overrides)
     
     # upload request file
-    request <- RblUpload(RblRequest = RblRequest, verbose = verbose)
+    request <- RblUpload(RblRequest = RblRequest, filename = paste(filename, n, sep = '_'), verbose = verbose)
+    
     # store info
     i$req[[request$req]] <- unlist(strsplit(RblRequest, '\n'))
     i$out[[request$out]] <- ''
@@ -111,7 +125,7 @@ RblQuery <- function(
   for(file.out in names(i$out)){
     
     # download response files
-    file <- RblDownload(file = file.out, pollFrequency = pollFrequency, timeout = timeout, verbose = verbose)
+    file <- RblDownload(file = file.out, frequency = frequency, timeout = timeout, verbose = verbose)
     # store info
     if(!is.null(file)) i$out[[file.out]] <- paste0('Read this file: ', file)
     

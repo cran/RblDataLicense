@@ -5,29 +5,39 @@
 \title{Query Bloomberg and Fetch Data}
 \usage{
 RblQuery(identifiers, fields, from = NULL, to = Sys.Date(),
-  overrides = NULL, auto.assign = FALSE, env = parent.frame(),
-  split = 100, pollFrequency = 60, timeout = 3600, verbose = TRUE)
+  auto.assign = FALSE, env = parent.frame(), category = c(),
+  add_headers = c(), overrides = c(), limit = 5, split = 100,
+  frequency = 60, timeout = 3600, filename = format(Sys.time(),
+  "\%m\%d\%H\%M\%S"), verbose = TRUE)
 }
 \arguments{
-\item{identifiers}{vector of Bloomberg identifiers. Ex c('SXXE Index', 'SX5E Index')}
+\item{identifiers}{vector of Bloomberg identifiers. E.g. c('SXXE Index', 'SX5E Index')}
 
-\item{fields}{vector of Bloomberg fields. Ex. c('PX_LAST', 'PX_CLOSE', 'PX_OPEN', 'PX_HIGH', 'PX_LOW')}
+\item{fields}{vector of Bloomberg fields. E.g. c('PX_LAST', 'PX_CLOSE', 'PX_OPEN', 'PX_HIGH', 'PX_LOW')}
 
-\item{from}{date or string (format YYYY-MM-DD). The start time of the period of interest}
+\item{from}{date or string (format YYYY-MM-DD). Start time for the 'gethistory' request. If not provided, a 'getdata' request will be made}
 
-\item{to}{date or string (format YYYY-MM-DD). The end time of the period of interest. Ignored if \emph{from} is not provided}
-
-\item{overrides}{named list of Bloomberg overrides. Ex list('END_DT' = '20100101')}
+\item{to}{date or string (format YYYY-MM-DD). End time for the 'gethistory' request. Ignored if \emph{from} is not provided}
 
 \item{auto.assign}{logical. Should results be loaded to env? Ignored if \emph{from} is not provided}
 
 \item{env}{where to create objects if auto.assign = TRUE}
 
-\item{split}{maximum number of identifiers to process at once. Split requests to avoid memory leaks}
+\item{category}{vector of Data License categories to enable. E.g. c('SECMASTER', 'PRICING', 'FUNDAMENTALS'). WARNING! Each DL category is billed separately, so check your DL license carefully!}
 
-\item{pollFrequency}{the polling frequency to check if the response file is available at Bloomberg}
+\item{add_headers}{named vector of additional headers. E.g. c(PROGRAMFLAG = 'oneshot')}
+
+\item{overrides}{named vector of Bloomberg overrides. E.g. c('END_DT' = '20100101')}
+
+\item{limit}{prevent requesting data for more than this amout of identifiers. This is done to help you keeping your budget under control. Data License is billing based on the amout of instruments you request, so check your DL license carefully before increasing this limit.}
+
+\item{split}{maximum number of identifiers to process at once. Requests are split to avoid memory leaks.}
+
+\item{frequency}{the polling frequency to check if the response file is available at Bloomberg}
 
 \item{timeout}{the timeout in seconds}
+
+\item{filename}{name assigned to the remote file. Only alphanumeric characters are allowed. Invalid characters are removed.}
 
 \item{verbose}{logical. Should R report extra information on progress?}
 }
@@ -60,10 +70,10 @@ The following routine to query Bloomberg is implemented:
 \examples{
 \dontrun{
 # Run RblConnect first
-x <- RblQuery(fields = c('PX_LAST', 'PX_OPEN', 'PX_HIGH', 'PX_LOW'), 
-              identifiers = c('SXXE Index', "SX5E Index"), 
-              from = '2005-01-01')
-str(x)
+data <- RblQuery(fields = c('PX_LAST', 'PX_OPEN', 'PX_HIGH', 'PX_LOW'), 
+                 identifiers = c('SXXE Index', "SX5E Index"), 
+                 from = '2005-01-01')
+str(data)
 }
 
 }

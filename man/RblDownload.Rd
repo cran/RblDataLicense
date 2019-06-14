@@ -4,12 +4,12 @@
 \alias{RblDownload}
 \title{Download a file from Bloomberg}
 \usage{
-RblDownload(file, pollFrequency = 60, timeout = 3600, verbose = TRUE)
+RblDownload(file, frequency = 60, timeout = 3600, verbose = TRUE)
 }
 \arguments{
 \item{file}{character string representing the file to download}
 
-\item{pollFrequency}{the polling frequency to check if file is available at Bloomberg}
+\item{frequency}{the polling frequency to check if file is available at Bloomberg}
 
 \item{timeout}{the timeout in seconds}
 
@@ -26,9 +26,22 @@ If the file is not available yet (i.e. a request file has just been uploaded), t
 \examples{
 \dontrun{
 # Run RblConnect first
-RblRequest <- RblRequestBuilder(header = list(FIRMNAME = RblUser(), PROGRAMNAME = 'getdata'), 
-                                fields = c('PX_LAST'), identifiers = c('SXXE Index'))
+
+# Build a request file to download the daily closing prices of 
+#  EURO STOXX Index from 2005-01-01 to 2015-12-31.
+RblRequest <- 
+     RblRequestBuilder(
+          header = c(FIRMNAME = RblUser(), 
+                     PROGRAMNAME = 'gethistory', 
+                     DATERANGE = '20050101|20151231'),
+          fields = c('PX_LAST'), 
+          identifiers = c('SXXE Index')
+     )
+                                
+# Upload the request file
 req <- RblUpload(RblRequest)
+
+# Download the response file
 out <- RblDownload(req$out)
 out
 }

@@ -4,28 +4,38 @@
 \alias{RblRequestBuilder}
 \title{Build a request file to query Bloomberg}
 \usage{
-RblRequestBuilder(header, fields, identifiers, overrides = NULL)
+RblRequestBuilder(header, fields, identifiers, overrides = c())
 }
 \arguments{
-\item{header}{names list of headers. Ex. list(FIRMNAME = RblUser(), PROGRAMNAME = 'getdata')}
+\item{header}{named vector of headers. E.g. c(FIRMNAME = RblUser(), PROGRAMNAME = 'getdata')}
 
-\item{fields}{vector of Bloomberg fields. Ex. c('PX_LAST', 'PX_OPEN', 'PX_HIGH', 'PX_LOW')}
+\item{fields}{vector of Bloomberg fields. E.g. c('PX_LAST', 'PX_OPEN', 'PX_HIGH', 'PX_LOW')}
 
-\item{identifiers}{vector of Bloomberg identifiers. Ex c('SXXE Index', 'SX5E Index')}
+\item{identifiers}{vector of Bloomberg identifiers. E.g. c('SXXE Index', 'SX5E Index')}
 
-\item{overrides}{named list of Bloomberg overrides. Ex list('END_DT' = '20100101')}
+\item{overrides}{named vector of Bloomberg overrides. E.g. c('END_DT' = '20100101')}
 }
 \value{
 character string representing the request file. Upload it to query Bloomberg (see \code{\link{RblUpload}})
 }
 \description{
-The request file is generated according to Bloomberg Data License documentation
+The request file is generated according to Bloomberg Data License Documentation.
+Refer to the Documentation to build the request.
 }
 \examples{
 \dontrun{
 # Run RblConnect first
-RblRequest <- RblRequestBuilder(header = list(FIRMNAME = RblUser(), PROGRAMNAME = 'getdata'), 
-                                fields = c('PX_LAST'), identifiers = c('SXXE Index'))
+
+# Build a request file to download the daily closing prices of 
+#  EURO STOXX Index from 2005-01-01 to 2015-12-31.
+RblRequest <- 
+     RblRequestBuilder(
+          header = c(FIRMNAME = RblUser(), 
+                     PROGRAMNAME = 'gethistory', 
+                     DATERANGE = '20050101|20151231'),
+          fields = c('PX_LAST'), 
+          identifiers = c('SXXE Index')
+     )
 RblRequest
 }
 
