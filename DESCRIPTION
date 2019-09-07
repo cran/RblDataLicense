@@ -1,7 +1,7 @@
 Package: RblDataLicense
 Type: Package
 Title: R Interface to 'Bloomberg Data License'
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: person(given = "Emanuele", 
 				  family = "Guidotti", 
 				  email = "emanuele.guidotti@hotmail.it", 
@@ -22,8 +22,8 @@ BugReports: https://github.com/emanuele-guidotti/RblDataLicense/issues/
 Depends: RCurl, xts, R (>= 3.0)
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-06-14 11:50:30 UTC; Emanuele
+Packaged: 2019-09-07 08:35:56 UTC; Emanuele
 Author: Emanuele Guidotti [aut, cre] (<https://orcid.org/0000-0002-8961-6623>)
 Maintainer: Emanuele Guidotti <emanuele.guidotti@hotmail.it>
 Repository: CRAN
-Date/Publication: 2019-06-14 12:40:15 UTC
+Date/Publication: 2019-09-07 11:30:02 UTC
