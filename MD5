@@ -1,8 +1,13 @@
-9b51137a44b758fd7f95f15a2400e4a5 *DESCRIPTION
+be3088169a4a8e2dbe72c94be094432c *DESCRIPTION
 3e7db59e1bd728af59c13845b5258697 *NAMESPACE
+aa14c6b9295235b2272db7fc40e050b9 *NEWS.md
 209cb182f49cb6cf1e8cb26a1f37cbf7 *R/RblQuery.R
 bb7e0d79cac7917eb9af4c45b3f82a21 *R/core.R
-ab6f8692f72e3d80474763805541e152 *README.md
+b4b51fea409f11dce78937beea801aad *README.md
+108e2da2b76c6fefbb6d1f5fe57bd597 *build/vignette.rds
+19335dcf660f5f020d5c55fd35f18887 *inst/CITATION
+4036b64a89ddc1df9eabbed9f06c3d87 *inst/doc/RblDataLicense.Rmd
+dfce4001ebc20a550c7709a7576706ac *inst/doc/RblDataLicense.html
 cee2f8535d088e525fe4bc8295c113cb *man/RblConnect.Rd
 77ee9e598cff8777484634cc2958e650 *man/RblDownload.Rd
 72ad36b43d01e2dc66970ea5db8919ba *man/RblFiles.Rd
@@ -12,3 +17,4 @@ cc1a0d6c23322e045b47e84288ddadc0 *man/RblRequestBuilder.Rd
 25ffcb1b2e0853695b8d76dc15b1198b *man/RblUpload.Rd
 2cf0d0446cf663d2820eb2a0153d6c0e *man/RblUrl.Rd
 aa74f4af1c7c1cfa0e7ab6d7f5998307 *man/RblUser.Rd
+4036b64a89ddc1df9eabbed9f06c3d87 *vignettes/RblDataLicense.Rmd
