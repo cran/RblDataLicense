@@ -1,6 +1,6 @@
 # RblDataLicense
 
-[![](https://www.r-pkg.org/badges/version/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://www.r-pkg.org/badges/last-release/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://cranlogs.r-pkg.org/badges/grand-total/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense)
+[![](https://www.r-pkg.org/badges/version/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://www.r-pkg.org/badges/last-release/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://cranlogs.r-pkg.org/badges/grand-total/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://travis-ci.com/eguidotti/RblDataLicense.svg?branch=master)](https://travis-ci.com/eguidotti/RblDataLicense)
 
 
 The __RblDataLicense__ package aims at providing an easy R interface to access prices and market data with the __Bloomberg Data License__ service. Unlike the [Rblpapi](https://cran.r-project.org/package=Rblpapi) package for Bloomberg Terminal users, [RblDataLicense](https://cran.r-project.org/package=RblDataLicense) does not require the user to set up any working Bloomberg installation. As a prerequisite, a valid Data License from Bloomberg is needed together with the corresponding SFTP credentials and whitelisting of the IP from which accessing the service.
@@ -15,7 +15,7 @@ As a prerequisite, a valid Data License from Bloomberg is needed together with t
 
 The Bloomberg Data License Service is billed on a pay-per-use model, based on the amount of instruments and data categories requested. The RblDataLicense package implements several checks to protect the user against unintended programming errors and to help keeping costs under control. In any case, to avoid incurring unexpected expenses, the user should carefully read the Bloomberg contract before accessing the Data License Service with this or any other software.
 
-RblDataLicense is built on top of [RCurl](https://cran.r-project.org/package=RCurl), a wrapper for [libcurl](https://curl.haxx.se/libcurl/). The package establishes SFTP connections to Bloomberg Data License. On some Linux systems, this may not work out of the box, as libcurl does not natively support SFTP. In that case, the user needs to compile curl with SFTP support first. 
+RblDataLicense is built on top of [RCurl](https://cran.r-project.org/package=RCurl), a wrapper for [libcurl](https://curl.se/libcurl/). The package establishes SFTP connections to Bloomberg Data License. On some Linux systems, this may not work out of the box, as libcurl does not natively support SFTP. In that case, the user needs to compile curl with SFTP support first. 
 
 ## Encryption
 
