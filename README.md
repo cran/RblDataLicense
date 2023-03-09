@@ -1,7 +1,6 @@
+[![](https://www.r-pkg.org/badges/version/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://www.r-pkg.org/badges/last-release/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://cranlogs.r-pkg.org/badges/grand-total/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense)
+
 # RblDataLicense
-
-[![](https://www.r-pkg.org/badges/version/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://www.r-pkg.org/badges/last-release/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://cranlogs.r-pkg.org/badges/grand-total/RblDataLicense)](https://CRAN.R-project.org/package=RblDataLicense) [![](https://travis-ci.com/eguidotti/RblDataLicense.svg?branch=master)](https://travis-ci.com/eguidotti/RblDataLicense)
-
 
 The __RblDataLicense__ package aims at providing an easy R interface to access prices and market data with the __Bloomberg Data License__ service. Unlike the [Rblpapi](https://cran.r-project.org/package=Rblpapi) package for Bloomberg Terminal users, [RblDataLicense](https://cran.r-project.org/package=RblDataLicense) does not require the user to set up any working Bloomberg installation. As a prerequisite, a valid Data License from Bloomberg is needed together with the corresponding SFTP credentials and whitelisting of the IP from which accessing the service.
 
@@ -78,7 +77,7 @@ data <- RblQuery(fields = c('PX_LAST', 'PX_OPEN', 'PX_HIGH', 'PX_LOW'),
 
 The RblDataLicense was developed at Algo Finance Sagl, software house start-up developing financial algorithms for the asset management industry. The Swiss company is gratefully acknowledged for open-sourcing the software.
 
-## Legal
+## Disclaimer
 
 All code of the RblDataLicense is released under the [GNU GPL-3](https://cran.r-project.org/web/licenses/GPL-3). This software and its author are in no way affiliated, endorsed, or approved by "Bloomberg" or any of its affiliates. "Bloomberg" is a registered trademark. All trademarks and registered trademarks are the property of their respective owners.
 

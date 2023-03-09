@@ -12,7 +12,7 @@
 
 <meta name="author" content="Emanuele Guidotti" />
 
-<meta name="date" content="2021-07-29" />
+<meta name="date" content="2023-03-10" />
 
 <title>Connecting R to Bloomberg Data License</title>
 
@@ -29,45 +29,31 @@ document.addEventListener('DOMContentLoaded', function(e) {
   }
 });
 </script>
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
-  }
-});
-</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -79,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -348,70 +333,120 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Connecting R to Bloomberg Data License</h1>
 <h4 class="author">Emanuele Guidotti</h4>
-<h4 class="date">2021-07-29</h4>
+<h4 class="date">2023-03-10</h4>
 
 
 
-<p>The <strong>RblDataLicense</strong> package aims at providing an easy R interface to access prices and market data with the <strong>Bloomberg Data License</strong> service. Unlike the <a href="https://cran.r-project.org/package=Rblpapi">Rblpapi</a> package for Bloomberg Terminal users, <a href="https://cran.r-project.org/package=RblDataLicense">RblDataLicense</a> does not require the user to set up any working Bloomberg installation. As a prerequisite, a valid Data License from Bloomberg is needed together with the corresponding SFTP credentials and whitelisting of the IP from which accessing the service.</p>
-<p><em>This software and its author are in no way affiliated, endorsed, or approved by “Bloomberg” or any of its affiliates. “Bloomberg” is a registered trademark.</em></p>
+<p>The <strong>RblDataLicense</strong> package aims at providing an easy
+R interface to access prices and market data with the <strong>Bloomberg
+Data License</strong> service. Unlike the <a href="https://cran.r-project.org/package=Rblpapi">Rblpapi</a> package
+for Bloomberg Terminal users, <a href="https://cran.r-project.org/package=RblDataLicense">RblDataLicense</a>
+does not require the user to set up any working Bloomberg installation.
+As a prerequisite, a valid Data License from Bloomberg is needed
+together with the corresponding SFTP credentials and whitelisting of the
+IP from which accessing the service.</p>
+<p><em>This software and its author are in no way affiliated, endorsed,
+or approved by “Bloomberg” or any of its affiliates. “Bloomberg” is a
+registered trademark.</em></p>
 <div id="prerequisites" class="section level2">
 <h2>Prerequisites</h2>
-<p>As a prerequisite, a valid Data License from Bloomberg is needed together with the corresponding SFTP credentials and whitelisting of the IP from which accessing the service. The credentials consist of the username and password needed to authenticate requests. As an additional security measure, all requests are blocked by default and are only accepted if coming from a whitelisted IP address. The user needs to inform Bloomberg of the IP addresses from which accessing the service. Only correctly authenticated requests from whitelisted IP will work.</p>
-<p>The Bloomberg Data License Service is billed on a pay-per-use model, based on the amount of instruments and data categories requested. The RblDataLicense package implements several checks to protect the user against unintended programming errors and to help keeping costs under control. In any case, to avoid incurring unexpected expenses, the user should carefully read the Bloomberg contract before accessing the Data License Service with this or any other software.</p>
-<p>RblDataLicense is built on top of <a href="https://cran.r-project.org/package=RCurl">RCurl</a>, a wrapper for <a href="https://curl.se/libcurl/">libcurl</a>. The package establishes SFTP connections to Bloomberg Data License. On some Linux systems, this may not work out of the box, as libcurl does not natively support SFTP. In that case, the user needs to compile curl with SFTP support first.</p>
+<p>As a prerequisite, a valid Data License from Bloomberg is needed
+together with the corresponding SFTP credentials and whitelisting of the
+IP from which accessing the service. The credentials consist of the
+username and password needed to authenticate requests. As an additional
+security measure, all requests are blocked by default and are only
+accepted if coming from a whitelisted IP address. The user needs to
+inform Bloomberg of the IP addresses from which accessing the service.
+Only correctly authenticated requests from whitelisted IP will work.</p>
+<p>The Bloomberg Data License Service is billed on a pay-per-use model,
+based on the amount of instruments and data categories requested. The
+RblDataLicense package implements several checks to protect the user
+against unintended programming errors and to help keeping costs under
+control. In any case, to avoid incurring unexpected expenses, the user
+should carefully read the Bloomberg contract before accessing the Data
+License Service with this or any other software.</p>
+<p>RblDataLicense is built on top of <a href="https://cran.r-project.org/package=RCurl">RCurl</a>, a wrapper for
+<a href="https://curl.se/libcurl/">libcurl</a>. The package establishes
+SFTP connections to Bloomberg Data License. On some Linux systems, this
+may not work out of the box, as libcurl does not natively support SFTP.
+In that case, the user needs to compile curl with SFTP support
+first.</p>
 </div>
 <div id="encryption" class="section level2">
 <h2>Encryption</h2>
-<p>The package does NOT support encrypted files. As stated in the Data License documentation:</p>
-<p><em>With SFTP via the Internet, there is no need for additional payload/content encryption. Clients are discouraged from using legacy DES software encryption option. Existing clients still using DES encryption can contact Customer Support to have DES payload/content encryption removed from their account.</em></p>
+<p>The package does NOT support encrypted files. As stated in the Data
+License documentation:</p>
+<p><em>With SFTP via the Internet, there is no need for additional
+payload/content encryption. Clients are discouraged from using legacy
+DES software encryption option. Existing clients still using DES
+encryption can contact Customer Support to have DES payload/content
+encryption removed from their account.</em></p>
 </div>
 <div id="quickstart" class="section level2">
 <h2>Quickstart</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Install RblDataLicense</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Load RblDataLicense</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">require</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span></code></pre></div>
-<p>As the very first step, the credentials received from Bloomberg to access the SFTP server must be provided to the <code>RblConnect</code> function. The function checks for the SFTP connection to be successful and stores the credentials in the current R session. Then, all the other functions of the package will be unlocked and ready to use.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># These are dummy credentials. Replace with the credentials received from Bloomberg</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">RblConnect</span>(<span class="dt">user =</span> <span class="st">&#39;dl000000&#39;</span>, <span class="dt">pw =</span> <span class="st">&#39;0000000000000000&#39;</span>) </span></code></pre></div>
-<p>The user should now prepare a request file according to the Bloomberg’s documentation, containing the instructions for the data to retrieve. This file has to be uploaded to the SFTP server the user owning a valid License has been granted access to. Upon receipt, Bloomberg generates the corresponding response file containing the data. This process can take up to several minutes, depending on the kind of request. Once available, the user can download the response file from the SFTP server and parse it to import the data in R.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install RblDataLicense</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load RblDataLicense</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span></code></pre></div>
+<p>As the very first step, the credentials received from Bloomberg to
+access the SFTP server must be provided to the <code>RblConnect</code>
+function. The function checks for the SFTP connection to be successful
+and stores the credentials in the current R session. Then, all the other
+functions of the package will be unlocked and ready to use.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These are dummy credentials. Replace with the credentials received from Bloomberg</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">RblConnect</span>(<span class="at">user =</span> <span class="st">&#39;dl000000&#39;</span>, <span class="at">pw =</span> <span class="st">&#39;0000000000000000&#39;</span>) </span></code></pre></div>
+<p>The user should now prepare a request file according to the
+Bloomberg’s documentation, containing the instructions for the data to
+retrieve. This file has to be uploaded to the SFTP server the user
+owning a valid License has been granted access to. Upon receipt,
+Bloomberg generates the corresponding response file containing the data.
+This process can take up to several minutes, depending on the kind of
+request. Once available, the user can download the response file from
+the SFTP server and parse it to import the data in R.</p>
 <div id="step-by-step-example" class="section level3">
 <h3>Step by Step Example</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Build a request file to download the daily closing prices of</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#  EURO STOXX Index from 2005-01-01 to 2015-12-31</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>RblRequest &lt;-<span class="st"> </span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="st">     </span><span class="kw">RblRequestBuilder</span>(</span>
-<span id="cb3-5"><a href="#cb3-5"></a>          <span class="dt">header =</span> <span class="kw">c</span>(<span class="dt">FIRMNAME =</span> <span class="kw">RblUser</span>(),</span>
-<span id="cb3-6"><a href="#cb3-6"></a>                     <span class="dt">PROGRAMNAME =</span> <span class="st">&#39;gethistory&#39;</span>,</span>
-<span id="cb3-7"><a href="#cb3-7"></a>             <span class="dt">DATERANGE =</span> <span class="st">&#39;20050101|20151231&#39;</span>),</span>
-<span id="cb3-8"><a href="#cb3-8"></a>          <span class="dt">fields =</span> <span class="kw">c</span>(<span class="st">&#39;PX_LAST&#39;</span>),</span>
-<span id="cb3-9"><a href="#cb3-9"></a>          <span class="dt">identifiers =</span> <span class="kw">c</span>(<span class="st">&#39;SXXE Index&#39;</span>)</span>
-<span id="cb3-10"><a href="#cb3-10"></a>     )</span>
-<span id="cb3-11"><a href="#cb3-11"></a></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co"># Upload the request file</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>req &lt;-<span class="st"> </span><span class="kw">RblUpload</span>(RblRequest)</span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="co"># Download the response file</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a>out &lt;-<span class="st"> </span><span class="kw">RblDownload</span>(req<span class="op">$</span>out)</span>
-<span id="cb3-17"><a href="#cb3-17"></a></span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="co"># Import the data</span></span>
-<span id="cb3-19"><a href="#cb3-19"></a>data &lt;-<span class="st"> </span><span class="kw">RblParse</span>(out)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a request file to download the daily closing prices of</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  EURO STOXX Index from 2005-01-01 to 2015-12-31</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>RblRequest <span class="ot">&lt;-</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">RblRequestBuilder</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">header =</span> <span class="fu">c</span>(<span class="at">FIRMNAME =</span> <span class="fu">RblUser</span>(),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">PROGRAMNAME =</span> <span class="st">&#39;gethistory&#39;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">DATERANGE =</span> <span class="st">&#39;20050101|20151231&#39;</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">fields =</span> <span class="fu">c</span>(<span class="st">&#39;PX_LAST&#39;</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">identifiers =</span> <span class="fu">c</span>(<span class="st">&#39;SXXE Index&#39;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Upload the request file</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>req <span class="ot">&lt;-</span> <span class="fu">RblUpload</span>(RblRequest)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the response file</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">RblDownload</span>(req<span class="sc">$</span>out)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the data</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">RblParse</span>(out)</span></code></pre></div>
 </div>
 <div id="all-in-one-example" class="section level3">
 <h3>All in One Example</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>data &lt;-<span class="st"> </span><span class="kw">RblQuery</span>(<span class="dt">fields =</span> <span class="kw">c</span>(<span class="st">&#39;PX_LAST&#39;</span>, <span class="st">&#39;PX_OPEN&#39;</span>, <span class="st">&#39;PX_HIGH&#39;</span>, <span class="st">&#39;PX_LOW&#39;</span>), </span>
-<span id="cb4-2"><a href="#cb4-2"></a>                 <span class="dt">identifiers =</span> <span class="kw">c</span>(<span class="st">&#39;SXXE Index&#39;</span>, <span class="st">&quot;SX5E Index&quot;</span>), </span>
-<span id="cb4-3"><a href="#cb4-3"></a>                 <span class="dt">from =</span> <span class="st">&#39;2005-01-01&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">RblQuery</span>(<span class="at">fields =</span> <span class="fu">c</span>(<span class="st">&#39;PX_LAST&#39;</span>, <span class="st">&#39;PX_OPEN&#39;</span>, <span class="st">&#39;PX_HIGH&#39;</span>, <span class="st">&#39;PX_LOW&#39;</span>), </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">identifiers =</span> <span class="fu">c</span>(<span class="st">&#39;SXXE Index&#39;</span>, <span class="st">&quot;SX5E Index&quot;</span>), </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">from =</span> <span class="st">&#39;2005-01-01&#39;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2>Acknowledgements</h2>
-<p>The RblDataLicense was developed at Algo Finance Sagl, software house start-up developing financial algorithms for the asset management industry. The Swiss company is gratefully acknowledged for open-sourcing the software.</p>
+<p>The RblDataLicense was developed at Algo Finance Sagl, software house
+start-up developing financial algorithms for the asset management
+industry. The Swiss company is gratefully acknowledged for open-sourcing
+the software.</p>
 </div>
-<div id="legal" class="section level2">
-<h2>Legal</h2>
-<p>All code of the RblDataLicense is released under the <a href="https://cran.r-project.org/web/licenses/GPL-3">GNU GPL-3</a>. This software and its author are in no way affiliated, endorsed, or approved by “Bloomberg” or any of its affiliates. “Bloomberg” is a registered trademark. All trademarks and registered trademarks are the property of their respective owners.</p>
+<div id="disclaimer" class="section level2">
+<h2>Disclaimer</h2>
+<p>All code of the RblDataLicense is released under the <a href="https://cran.r-project.org/web/licenses/GPL-3">GNU GPL-3</a>. This
+software and its author are in no way affiliated, endorsed, or approved
+by “Bloomberg” or any of its affiliates. “Bloomberg” is a registered
+trademark. All trademarks and registered trademarks are the property of
+their respective owners.</p>
 </div>
 
 
