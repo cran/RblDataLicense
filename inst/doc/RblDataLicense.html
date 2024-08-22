@@ -12,7 +12,7 @@
 
 <meta name="author" content="Emanuele Guidotti" />
 
-<meta name="date" content="2023-03-10" />
+<meta name="date" content="2024-08-21" />
 
 <title>Connecting R to Bloomberg Data License</title>
 
@@ -121,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -333,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Connecting R to Bloomberg Data License</h1>
 <h4 class="author">Emanuele Guidotti</h4>
-<h4 class="date">2023-03-10</h4>
+<h4 class="date">2024-08-21</h4>
 
 
 
@@ -384,18 +391,18 @@ encryption removed from their account.</em></p>
 </div>
 <div id="quickstart" class="section level2">
 <h2>Quickstart</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install RblDataLicense</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load RblDataLicense</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Install RblDataLicense</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Load RblDataLicense</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">require</span>(<span class="st">&#39;RblDataLicense&#39;</span>)</span></code></pre></div>
 <p>As the very first step, the credentials received from Bloomberg to
 access the SFTP server must be provided to the <code>RblConnect</code>
 function. The function checks for the SFTP connection to be successful
 and stores the credentials in the current R session. Then, all the other
 functions of the package will be unlocked and ready to use.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These are dummy credentials. Replace with the credentials received from Bloomberg</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">RblConnect</span>(<span class="at">user =</span> <span class="st">&#39;dl000000&#39;</span>, <span class="at">pw =</span> <span class="st">&#39;0000000000000000&#39;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># These are dummy credentials. Replace with the credentials received from Bloomberg</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">RblConnect</span>(<span class="at">user =</span> <span class="st">&#39;dl000000&#39;</span>, <span class="at">pw =</span> <span class="st">&#39;0000000000000000&#39;</span>) </span></code></pre></div>
 <p>The user should now prepare a request file according to the
 Bloomberg’s documentation, containing the instructions for the data to
 retrieve. This file has to be uploaded to the SFTP server the user
@@ -406,31 +413,31 @@ request. Once available, the user can download the response file from
 the SFTP server and parse it to import the data in R.</p>
 <div id="step-by-step-example" class="section level3">
 <h3>Step by Step Example</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a request file to download the daily closing prices of</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  EURO STOXX Index from 2005-01-01 to 2015-12-31</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>RblRequest <span class="ot">&lt;-</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">RblRequestBuilder</span>(</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">header =</span> <span class="fu">c</span>(<span class="at">FIRMNAME =</span> <span class="fu">RblUser</span>(),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">PROGRAMNAME =</span> <span class="st">&#39;gethistory&#39;</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">DATERANGE =</span> <span class="st">&#39;20050101|20151231&#39;</span>),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">fields =</span> <span class="fu">c</span>(<span class="st">&#39;PX_LAST&#39;</span>),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">identifiers =</span> <span class="fu">c</span>(<span class="st">&#39;SXXE Index&#39;</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>     )</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Upload the request file</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>req <span class="ot">&lt;-</span> <span class="fu">RblUpload</span>(RblRequest)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the response file</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">RblDownload</span>(req<span class="sc">$</span>out)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the data</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">RblParse</span>(out)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Build a request file to download the daily closing prices of</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#  EURO STOXX Index from 2005-01-01 to 2015-12-31</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>RblRequest <span class="ot">&lt;-</span> </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>     <span class="fu">RblRequestBuilder</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>          <span class="at">header =</span> <span class="fu">c</span>(<span class="at">FIRMNAME =</span> <span class="fu">RblUser</span>(),</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                     <span class="at">PROGRAMNAME =</span> <span class="st">&#39;gethistory&#39;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>             <span class="at">DATERANGE =</span> <span class="st">&#39;20050101|20151231&#39;</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>          <span class="at">fields =</span> <span class="fu">c</span>(<span class="st">&#39;PX_LAST&#39;</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>          <span class="at">identifiers =</span> <span class="fu">c</span>(<span class="st">&#39;SXXE Index&#39;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>     )</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co"># Upload the request file</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>req <span class="ot">&lt;-</span> <span class="fu">RblUpload</span>(RblRequest)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co"># Download the response file</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">RblDownload</span>(req<span class="sc">$</span>out)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co"># Import the data</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">RblParse</span>(out)</span></code></pre></div>
 </div>
 <div id="all-in-one-example" class="section level3">
 <h3>All in One Example</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">RblQuery</span>(<span class="at">fields =</span> <span class="fu">c</span>(<span class="st">&#39;PX_LAST&#39;</span>, <span class="st">&#39;PX_OPEN&#39;</span>, <span class="st">&#39;PX_HIGH&#39;</span>, <span class="st">&#39;PX_LOW&#39;</span>), </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">identifiers =</span> <span class="fu">c</span>(<span class="st">&#39;SXXE Index&#39;</span>, <span class="st">&quot;SX5E Index&quot;</span>), </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">from =</span> <span class="st">&#39;2005-01-01&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">RblQuery</span>(<span class="at">fields =</span> <span class="fu">c</span>(<span class="st">&#39;PX_LAST&#39;</span>, <span class="st">&#39;PX_OPEN&#39;</span>, <span class="st">&#39;PX_HIGH&#39;</span>, <span class="st">&#39;PX_LOW&#39;</span>), </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                 <span class="at">identifiers =</span> <span class="fu">c</span>(<span class="st">&#39;SXXE Index&#39;</span>, <span class="st">&quot;SX5E Index&quot;</span>), </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                 <span class="at">from =</span> <span class="st">&#39;2005-01-01&#39;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="acknowledgements" class="section level2">

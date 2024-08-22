@@ -10,7 +10,7 @@
 #' @param host The connection host
 #' @param port The connection port
 #' @param protocol The connection protocol
-#' @param verbose logical. Should R report extra information on progress?
+#' @param verbose logical. Should print extra information on failure?
 #' 
 #' @return logical. Is the connection succesful?
 #' 
@@ -31,8 +31,7 @@ RblConnect <- function(user, pw, host = 'sftp.bloomberg.com', port = '22', proto
     url <- paste0(protocol, '://', user, ':', pw, '@', host, ':', port)
     
     # test connection
-    if( is(try(getURL(url), silent = T), 'try-error') ){ 
-      if(verbose) cat('Authentication failure: check your configurations and whitelist the IP address in use. Contact Bloomberg support for help.')
+    if( is(try(getURL(url), silent = !verbose), 'try-error') ){ 
       return(FALSE)
     }
       
@@ -361,7 +360,7 @@ RblDownload <- function(file, frequency = 60, timeout = 3600, verbose = TRUE) {
 #' 
 #' @return 
 #' \describe{
-#'  \item{PROGRAMNAME=getdata}{data.frame containig identifiers (rows) and fields (columns). NULL on failure.}
+#'  \item{PROGRAMNAME=getdata}{data.frame containing identifiers (rows) and fields (columns). NULL on failure.}
 #'  \item{PROGRAMNAME=gethistory}{list of xts objects. If \emph{auto.assign}=TRUE the xts objects are loaded in \emph{env} and the object names are returned. NULL on failure.}
 #' }
 #' 
